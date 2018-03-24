@@ -164,7 +164,7 @@ let currentPoint = {
     x: null,
     y: null,
     r: 2,
-    colour: "#8ED6FF",
+    colour: "black",
     fill: true,
     speed: innerCircle.speed+speedIncrement
 };
