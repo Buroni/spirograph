@@ -12,7 +12,6 @@ window.requestAnimFrame = (function(callback) {
 })();
 
 function drawPoint(point, context) {
-    console.log(point.colour)
     context.beginPath();
     context.arc(point.x, point.y, point.r, 0, 2*Math.PI);
     if (point.fill) {
