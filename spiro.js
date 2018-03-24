@@ -2,6 +2,7 @@ const width = 800, height = 800;
 const speedIncrement = 0.002;
 let handleLength = 60;
 let radians = [0,0,0,0];
+let sliderChanges = false;
 
 window.requestAnimFrame = (function(callback) {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -49,6 +50,12 @@ function drawHandle(outerCircle, context) {
 
 function animate(points) {
 
+    if (sliderChanges) {
+        window.setTimeout(function() {
+            sliderChanges = false;
+        }, 500);
+    }
+
     // Draw brush stroke
     drawBrush(0, points[0], brushCanvas, brushContext, {...points[points.length-1], r: handleLength, speed: points[points.length-1]}, false, true, false);
 
@@ -76,6 +83,10 @@ function clearBackground() {
     } else {
         drawPoint(outerCircle, outerCircleContext);
     }
+}
+
+function clearBrush() {
+    brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
 }
 
 function addCircle() {
@@ -113,6 +124,7 @@ let handleSlider = document.getElementById("handleRange");
 handleSlider.oninput = function() {
     handleLength = this.value;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
+    sliderChanges = true;
 }
 
 let speedSlider = document.getElementById("speedRange");
@@ -121,12 +133,14 @@ speedSlider.oninput = function() {
     points[points.length-1].speed = this.value/1000;
     points[0].speed = this.value/1000;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
+    sliderChanges = true;
 }
 
 let circleSlider = document.getElementById("circleRange");
 circleSlider.oninput = function() {
     points[points.length-1].r = this.value;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
+    sliderChanges = true;
 }
 
 let outerCircle = {
