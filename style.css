@@ -61,12 +61,20 @@ button {
 }
 
 .check {
-    padding-top: 15px;
+    padding-top: 20px;
     padding-right: 5px;
+}
+
+.colour {
+    width: 100%;
 }
 
 .pointer {
     cursor: pointer;
+}
+
+input {
+    border: none;
 }
 
 table {

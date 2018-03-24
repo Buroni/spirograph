@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <script src="jscolor.min.js"></script>
 </head>
 <body>
 <canvas id="outerCircleCanvas" width="800" height="800"></canvas>
@@ -19,6 +20,7 @@
         <td class="slider-label">Brush radius</td><td><input type="range" min="1" max="300" value="60" class="slider" id="handleRange" /></td><tr />
         <td class="slider-label">Speed</td><td><input type="range" min="1" max="10" value="7" class="slider" id="speedRange" /></td><tr />
         <td class="slider-label">Inner circle radius</td><td><input type="range" min="1" max="150" value="75" class="slider" id="circleRange" /></td><tr />
+        <td class="slider-label">Colour</td><td class="check"><input class="jscolor colour" value="8ED6FF" onchange="colourChange()" id="colour"></td><tr />
         <td class="slider-label"><label for="showBackground" class="pointer" onclick="clearBackground()">Show background</label></td><td class="check"><input type="checkbox" id="showBackground"  onclick="clearBackground()" checked /></td><tr />
         <td class="slider-label"><button onclick="clearBrush()">Clear canvas</button></td><td></td><tr />
     </table>

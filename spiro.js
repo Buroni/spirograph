@@ -12,6 +12,7 @@ window.requestAnimFrame = (function(callback) {
 })();
 
 function drawPoint(point, context) {
+    console.log(point.colour)
     context.beginPath();
     context.arc(point.x, point.y, point.r, 0, 2*Math.PI);
     if (point.fill) {
@@ -113,6 +114,10 @@ function checkButtonDisabled() {
     document.getElementById("remove-circle").disabled = (points.length <= 3);
 }
 
+function colourChange() {
+    points[0].colour = "#" + document.getElementById('colour').value;
+}
+
 let brushCanvas = document.getElementById('brushCanvas');
 let brushContext = brushCanvas.getContext('2d');
 let outerCircleCanvas = document.getElementById('outerCircleCanvas');
@@ -129,7 +134,6 @@ handleSlider.oninput = function() {
 
 let speedSlider = document.getElementById("speedRange");
 speedSlider.oninput = function() {
-    console.log(this.value);
     points[points.length-1].speed = this.value/1000;
     points[0].speed = this.value/1000;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
