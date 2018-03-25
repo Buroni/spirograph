@@ -4,6 +4,39 @@ let handleLength = 60;
 let radians = [0,0,0,0];
 let circleChanges = false;
 
+let brushCanvas = document.getElementById('brushCanvas');
+let brushContext = brushCanvas.getContext('2d');
+let outerCircleCanvas = document.getElementById('outerCircleCanvas');
+let outerCircleContext = outerCircleCanvas.getContext('2d');
+let innerCircleCanvas = document.getElementById('innerCircleCanvas');
+let innerCircleContext = innerCircleCanvas.getContext('2d');
+
+let outerCircle = {
+    x: width / 2,
+    y: height / 2,
+    r: 300,
+    colour: "gray",
+    fill: false
+};
+
+let innerCircle = {
+    x: null,
+    y: null,
+    r: 150,
+    colour: "gray",
+    fill: false,
+    speed: 0.003
+};
+
+let currentPoint = {
+    x: null,
+    y: null,
+    r: 2,
+    colour: "#8ED6FF",
+    fill: true,
+    speed: innerCircle.speed+speedIncrement
+};
+
 window.requestAnimFrame = (callback => {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
         function(callback) {
@@ -85,91 +118,9 @@ function clearBrush() {
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
 }
 
-function addCircle() {
-    brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-    radians.push(0);
-    smallestCircle = points[points.length-1];
-    points.push({...smallestCircle, r: smallestCircle.r/2, speed: smallestCircle.speed+speedIncrement});
-    points[0] = {...points[0], speed: points[0].speed+speedIncrement};
-
-    circleChanges = true;
-    setTimeout(() => circleChanges = false, 50);
-
-    checkButtonDisabled();
-    document.getElementById("circleRange").setAttribute('max', points[points.length-1].r);
-}
-
-function removeCircle() {
-    brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-    radians.pop();
-    points.pop();
-    points[0] = {...points[0], speed: points[0].speed-speedIncrement};
-    checkButtonDisabled();
-    document.getElementById("circleRange").setAttribute('max', points[points.length-1].r);
-
-    circleChanges = true;
-    setTimeout(() => circleChanges = false, 50);
-}
-
-function checkButtonDisabled() {
-    document.getElementById("remove-circle").disabled = (points.length <= 3);
-}
-
 function colourChange() {
     points[0].colour = "#" + document.getElementById('colour').value;
 }
-
-let brushCanvas = document.getElementById('brushCanvas');
-let brushContext = brushCanvas.getContext('2d');
-let outerCircleCanvas = document.getElementById('outerCircleCanvas');
-let outerCircleContext = outerCircleCanvas.getContext('2d');
-let innerCircleCanvas = document.getElementById('innerCircleCanvas');
-let innerCircleContext = innerCircleCanvas.getContext('2d');
-
-let handleSlider = document.getElementById("handleRange");
-handleSlider.oninput = function() {
-    handleLength = this.value;
-    brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-}
-
-let speedSlider = document.getElementById("speedRange");
-speedSlider.oninput = function() {
-    points[points.length-1].speed = this.value/1000;
-    points[0].speed = this.value/1000;
-    brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-}
-
-let circleSlider = document.getElementById("circleRange");
-circleSlider.oninput = function() {
-    points[points.length-1].r = this.value;
-    brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-}
-
-let outerCircle = {
-    x: width / 2,
-    y: height / 2,
-    r: 300,
-    colour: "gray",
-    fill: false
-};
-
-let innerCircle = {
-    x: null,
-    y: null,
-    r: 150,
-    colour: "gray",
-    fill: false,
-    speed: 0.003
-};
-
-let currentPoint = {
-    x: null,
-    y: null,
-    r: 2,
-    colour: "#8ED6FF",
-    fill: true,
-    speed: innerCircle.speed+speedIncrement
-};
 
 let points = [currentPoint, outerCircle, {...innerCircle}, {...innerCircle, r: innerCircle.r/2, speed: innerCircle.speed+speedIncrement}];
 
