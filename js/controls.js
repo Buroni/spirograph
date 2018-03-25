@@ -1,3 +1,11 @@
+/**
+ * Javascript for handling user controls.
+ *
+ * @link https://github.com/Buroni/spirograph
+ * @author Jake Browning
+ */
+
+
 function addCircle() {
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
     radians.push(0);

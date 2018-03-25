@@ -1,3 +1,10 @@
+/**
+ * Javascript for calculating and animating the spirograph.
+ *
+ * @link https://github.com/Buroni/spirograph
+ * @author Jake Browning
+ */
+
 const width = 800, height = 800;
 const speedIncrement = 0.002;
 let handleLength = 60;
