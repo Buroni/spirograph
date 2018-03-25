@@ -2,9 +2,9 @@ const width = 800, height = 800;
 const speedIncrement = 0.002;
 let handleLength = 60;
 let radians = [0,0,0,0];
-let sliderChanges = false;
+let circleChanges = false;
 
-window.requestAnimFrame = (function(callback) {
+window.requestAnimFrame = (callback => {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
         function(callback) {
             window.setTimeout(callback, 1000 / 60);
@@ -50,14 +50,10 @@ function drawHandle(outerCircle, context) {
 
 function animate(points) {
 
-    if (sliderChanges) {
-        window.setTimeout(function() {
-            sliderChanges = false;
-        }, 500);
+    if (!circleChanges) {
+        // Draw brush stroke
+        drawBrush(0, points[0], brushCanvas, brushContext, {...points[points.length-1], r: handleLength, speed: points[points.length-1]}, false, true, false);
     }
-
-    // Draw brush stroke
-    drawBrush(0, points[0], brushCanvas, brushContext, {...points[points.length-1], r: handleLength, speed: points[points.length-1]}, false, true, false);
 
     innerCircleContext.clearRect(0, 0, innerCircleCanvas.width, innerCircleCanvas.height);
     for (i = 2; i < points.length; i++) {
@@ -96,6 +92,9 @@ function addCircle() {
     points.push({...smallestCircle, r: smallestCircle.r/2, speed: smallestCircle.speed+speedIncrement});
     points[0] = {...points[0], speed: points[0].speed+speedIncrement};
 
+    circleChanges = true;
+    setTimeout(() => circleChanges = false, 50);
+
     checkButtonDisabled();
     document.getElementById("circleRange").setAttribute('max', points[points.length-1].r);
 }
@@ -107,6 +106,9 @@ function removeCircle() {
     points[0] = {...points[0], speed: points[0].speed-speedIncrement};
     checkButtonDisabled();
     document.getElementById("circleRange").setAttribute('max', points[points.length-1].r);
+
+    circleChanges = true;
+    setTimeout(() => circleChanges = false, 50);
 }
 
 function checkButtonDisabled() {
@@ -128,7 +130,7 @@ let handleSlider = document.getElementById("handleRange");
 handleSlider.oninput = function() {
     handleLength = this.value;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-    sliderChanges = true;
+    circleChanges = true;
 }
 
 let speedSlider = document.getElementById("speedRange");
@@ -136,14 +138,12 @@ speedSlider.oninput = function() {
     points[points.length-1].speed = this.value/1000;
     points[0].speed = this.value/1000;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-    sliderChanges = true;
 }
 
 let circleSlider = document.getElementById("circleRange");
 circleSlider.oninput = function() {
     points[points.length-1].r = this.value;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-    sliderChanges = true;
 }
 
 let outerCircle = {
