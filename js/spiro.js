@@ -7,7 +7,7 @@
 
 const width = 800, height = 800;
 const speedIncrement = 0.002;
-let handleLength = 60;
+let handleLength = 127;
 let radians = [0,0,0,0];
 let circleChanges = true;
 
