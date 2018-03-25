@@ -9,7 +9,7 @@ const width = 800, height = 800;
 const speedIncrement = 0.002;
 let handleLength = 60;
 let radians = [0,0,0,0];
-let circleChanges = false;
+let circleChanges = true;
 
 let brushCanvas = document.getElementById('brushCanvas');
 let brushContext = brushCanvas.getContext('2d');
@@ -38,7 +38,7 @@ let innerCircle = {
 let currentPoint = {
     x: null,
     y: null,
-    r: 2,
+    r: 3,
     colour: "#8ED6FF",
     fill: true,
     speed: innerCircle.speed+speedIncrement
@@ -78,6 +78,31 @@ function drawBrush(i, point, canvas, context, outer, refresh, reverse, backgroun
     }
 }
 
+function drawStroke(i, point, canvas, context, outer, refresh, reverse, background) {
+    r = radians[i];
+    let oldX = point.x, oldY = point.y;
+    point.x = outer.x + outer.r*Math.cos(r);
+    point.y = outer.y + outer.r*Math.sin(r);
+
+    let increment = 2*Math.PI*point.speed;
+    if (reverse) increment = -1*increment;
+    radians[i] = (r+increment == 2*Math.PI) ? 0 : r + increment;
+
+    if (refresh) context.clearRect(0, 0, canvas.width, canvas.height);
+
+    if ((!background || document.getElementById('showBackground').checked) && !circleChanges) {
+        context.beginPath();
+        context.moveTo(oldX,oldY);
+        context.lineTo(
+            point.x,
+            point.y
+        );
+        context.strokeStyle = point.colour;
+        context.lineWidth = point.r;
+        context.stroke();
+    }
+}
+
 function drawHandle(outerCircle, context) {
     context.beginPath();
     context.moveTo(outerCircle.x,outerCircle.y);
@@ -90,10 +115,9 @@ function drawHandle(outerCircle, context) {
 
 function animate(points) {
 
-    if (!circleChanges) {
-        // Draw brush stroke
-        drawBrush(0, points[0], brushCanvas, brushContext, {...points[points.length-1], r: handleLength, speed: points[points.length-1]}, false, true, false);
-    }
+    // Draw brush stroke
+    drawStroke(0, points[0], brushCanvas, brushContext, {...points[points.length-1], r: handleLength, speed: points[points.length-1]}, false, true, false);
+
 
     innerCircleContext.clearRect(0, 0, innerCircleCanvas.width, innerCircleCanvas.height);
     for (i = 2; i < points.length; i++) {
@@ -134,3 +158,4 @@ let points = [currentPoint, outerCircle, {...innerCircle}, {...innerCircle, r: i
 drawPoint(outerCircle, outerCircleContext);
 
 animate(points);
+setTimeout(() => circleChanges = false, 100);

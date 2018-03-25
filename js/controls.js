@@ -5,7 +5,6 @@
  * @author Jake Browning
  */
 
-
 function addCircle() {
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
     radians.push(0);
@@ -40,6 +39,11 @@ let handleSlider = document.getElementById("handleRange");
 handleSlider.oninput = function() {
     handleLength = this.value;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
+}
+
+let widthSlider = document.getElementById("widthRange");
+widthSlider.oninput = function() {
+    points[0].r = this.value;
 }
 
 let speedSlider = document.getElementById("speedRange");
