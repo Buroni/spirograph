@@ -130,7 +130,6 @@ let handleSlider = document.getElementById("handleRange");
 handleSlider.oninput = function() {
     handleLength = this.value;
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
-    circleChanges = true;
 }
 
 let speedSlider = document.getElementById("speedRange");
