@@ -2,6 +2,7 @@ body {
     margin: 0px;
     padding: 0px;
     font-family: helvetica;
+    font-size: 13px;
 }
 
 canvas {
@@ -22,6 +23,17 @@ canvas {
 
 button {
     margin-right: 6px;
+}
+
+.share-box {
+    margin-top: 30px;
+    width: 100%;
+}
+
+.icon {
+    opacity: 0.4;
+    margin-left: 3px;
+    cursor: pointer;
 }
 
 .slider {
@@ -59,7 +71,6 @@ button {
     padding-top: 20px;
     padding-right: 5px;
     text-align: right;
-    font-size: 13px;
 }
 
 .check {
@@ -76,6 +87,23 @@ button {
 
 .pointer {
     cursor: pointer;
+}
+
+.share {
+    margin-top: 40px;
+}
+
+.slider-input {
+    width: 16px;
+    border-bottom: 2px solid rgb(133,198,136);
+    margin-top: 12px;
+    margin-left: 4px;
+}
+
+.share-url {
+    margin-top: 5px;
+    border-bottom: 2px solid rgb(133,198,136);
+    width: 60%;
 }
 
 input {

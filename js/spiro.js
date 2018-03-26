@@ -6,8 +6,10 @@
  */
 
 const width = 800, height = 800;
+const params = getSearchParameters();
 const speedIncrement = 0.002;
-let handleLength = 127;
+
+let handleLength = (params.handleRange) ? params.handleRange : 143;
 let radians = [0,0,0,0];
 let circleChanges = true;
 
@@ -17,6 +19,8 @@ let outerCircleCanvas = document.getElementById('outerCircleCanvas');
 let outerCircleContext = outerCircleCanvas.getContext('2d');
 let innerCircleCanvas = document.getElementById('innerCircleCanvas');
 let innerCircleContext = innerCircleCanvas.getContext('2d');
+
+const pointSpeed = (params.speedRange) ? params.speedRange/1000 : document.getElementById('speedRange').value/1000;
 
 let outerCircle = {
     x: width / 2,
@@ -32,16 +36,16 @@ let innerCircle = {
     r: 150,
     colour: "gray",
     fill: false,
-    speed: 0.003
+    speed: pointSpeed - 2*speedIncrement
 };
 
 let currentPoint = {
     x: null,
     y: null,
-    r: 3,
-    colour: "#8ED6FF",
+    r: (params.widthRange) ? params.widthRange : 2,
+    colour: (params.colour) ? "#"+params.colour : "#8ED6FF",
     fill: true,
-    speed: innerCircle.speed+speedIncrement
+    speed: pointSpeed
 };
 
 window.requestAnimFrame = (callback => {
@@ -116,7 +120,7 @@ function drawHandle(outerCircle, context) {
 function animate(points) {
 
     // Draw brush stroke
-    drawStroke(0, points[0], brushCanvas, brushContext, {...points[points.length-1], r: handleLength, speed: points[points.length-1]}, false, true, false);
+    drawStroke(0, points[0], brushCanvas, brushContext, {...points[points.length-1], r: handleLength, speed: points[points.length-1].speed}, false, true, false);
 
 
     innerCircleContext.clearRect(0, 0, innerCircleCanvas.width, innerCircleCanvas.height);
@@ -151,10 +155,10 @@ function clearBrush() {
 
 function colourChange() {
     points[0].colour = "#" + document.getElementById('colour').value;
+    buildShareUrl();
 }
 
 let points = [currentPoint, outerCircle, {...innerCircle}, {...innerCircle, r: innerCircle.r/2, speed: innerCircle.speed+speedIncrement}];
-
 drawPoint(outerCircle, outerCircleContext);
 
 animate(points);
