@@ -9,7 +9,7 @@ const width = 800, height = 800;
 const params = getSearchParameters();
 const speedIncrement = 0.002;
 
-let handleLength = (params.handleRange) ? params.handleRange : 143;
+let handleLength = (params.handleRange) ? params.handleRange : document.getElementById('handleRange').value;
 let radians = [0,0,0,0];
 let circleChanges = true;
 
