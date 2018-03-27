@@ -143,10 +143,10 @@ sliders["widthRange"].oninput = function() {
 sliders["speedRange"].oninput = function() {
     points[points.length-1].speed = this.value/1000;
     points[0].speed = this.value/1000;
-    points[points.length-1].speed = this.value/1000 - speedIncrement;
+    points[points.length-1].speed = this.value/1000;
     points.forEach((point,i) => {
         if (!point.speed || i < 2 || i === points.length - 1) return;
-        point.speed = this.value/1000 - speedIncrement*(points.length - i);
+        point.speed = this.value/1000 - speedIncrement*(points.length - i - 1);
     });
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
     setInput("speedRange");

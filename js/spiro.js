@@ -36,7 +36,7 @@ let innerCircle = {
     r: 150,
     colour: "gray",
     fill: false,
-    speed: pointSpeed - 2*speedIncrement
+    speed: pointSpeed - speedIncrement
 };
 
 let currentPoint = {
@@ -158,7 +158,7 @@ function colourChange() {
     buildShareUrl();
 }
 
-let points = [currentPoint, outerCircle, {...innerCircle}, {...innerCircle, r: innerCircle.r/2, speed: innerCircle.speed+speedIncrement}];
+let points = [currentPoint, outerCircle, {...innerCircle}, {...innerCircle, r: innerCircle.r/2, speed: pointSpeed}];
 drawPoint(outerCircle, outerCircleContext);
 
 animate(points);
