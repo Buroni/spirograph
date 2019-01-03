@@ -1,3 +1,7 @@
+/**
+ * Some functions for processing URL parameters
+ */
+
 // getSearchParameters and transformAssocArray taken from https://stackoverflow.com/a/5448635
 function getSearchParameters() {
     var prmstr = window.location.search.substr(1);

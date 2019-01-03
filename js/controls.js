@@ -7,7 +7,7 @@
 
 const ranges = ["widthRange", "handleRange", "speedRange", "circleRange"];
 const numCircles = (params.circles) ? params.circles : 3;
-let sliders = [];
+const sliders = [];
 
 function buildShareUrl() {
     const paramsArray = ranges.map(id => `${id}=${sliders[id].value}`);
@@ -52,43 +52,36 @@ function copyToClipboard() {
     });
 }
 
-function setSliderAttr(sliderId, attr, val) {
-    sliders[sliderId].setAttribute(attr, val);
-    if (sliders[sliderId].value < val) {
-        sliders[sliderId].setAttribute('value', val);
-    }
-    sliders[sliderId].oninput();
-    sliders[sliderId].parentElement.appendChild(sliders[sliderId]);
-}
-
-
-
+/**
+ * Add a circle to the spirograph with half radius and a slightly faster speed
+ * than the current smallest circle.
+ */
 function addCircle() {
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
     radians.push(0);
     smallestCircle = points[points.length-1];
-    points.push({...smallestCircle, r: smallestCircle.r/2, speed: smallestCircle.speed+speedIncrement});
-    points[0] = {...points[0], speed: points[0].speed+speedIncrement};
+    points.push({...smallestCircle, r: smallestCircle.r/2, speed: smallestCircle.speed + speedIncrement});
 
     circleChanges = true;
     setTimeout(() => circleChanges = false, 50);
 
     checkButtonDisabled();
-    document.getElementById("circleRange").setAttribute('max', points[points.length-1].r);
-    setSliderAttr("speedRange", "min", points.length+points.length-1);
+    buildShareUrl();
 }
 
+/**
+ * Remove the smallest circle from the spirograph.
+ */
 function removeCircle() {
     brushContext.clearRect(0, 0, brushCanvas.width, brushCanvas.height);
     radians.pop();
     points.pop();
-    points[0] = {...points[0], speed: points[0].speed-speedIncrement};
+
     checkButtonDisabled();
-    document.getElementById("circleRange").setAttribute('max', points[points.length-1].r);
-    setSliderAttr("speedRange", "min", points.length+points.length-3);
 
     circleChanges = true;
     setTimeout(() => circleChanges = false, 50);
+    buildShareUrl();
 }
 
 function checkButtonDisabled() {
@@ -103,6 +96,10 @@ function setInputs(ids) {
     ids.forEach(id => setInput(id));
 }
 
+/**
+ * Update the slider bar based on the number field next to it.
+ * @param id
+ */
 function setSliderFromInput(id) {
     sliders[id].setAttribute('value', document.getElementById(id+"Input").value);
     sliders[id].oninput();
@@ -119,6 +116,7 @@ function setInnerCircleRadius() {
     if (params.circleRange) points[points.length-1].r = params.circleRange;
 }
 
+// If the user manually inputs a value in the slider field, update the slider bar.
 ranges.forEach(id => {
     sliders[id] = document.getElementById(id);
     if (params[id]) sliders[id].value = params[id];
@@ -143,7 +141,7 @@ sliders["widthRange"].oninput = function() {
 sliders["speedRange"].oninput = function() {
     points[points.length-1].speed = this.value/1000;
     points[0].speed = this.value/1000;
-    points[points.length-1].speed = this.value/1000;
+    points[points.length-1].speed = this.value/1000-speedIncrement;
     points.forEach((point,i) => {
         if (!point.speed || i < 2 || i === points.length - 1) return;
         point.speed = this.value/1000 - speedIncrement*(points.length - i - 1);

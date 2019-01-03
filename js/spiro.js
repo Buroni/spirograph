@@ -8,21 +8,21 @@
 const width = 800, height = 800;
 const params = getSearchParameters();
 const speedIncrement = 0.002;
+const radians = [0,0,0,0];
 
 let handleLength = (params.handleRange) ? params.handleRange : document.getElementById('handleRange').value;
-let radians = [0,0,0,0];
 let circleChanges = true;
 
-let brushCanvas = document.getElementById('brushCanvas');
-let brushContext = brushCanvas.getContext('2d');
-let outerCircleCanvas = document.getElementById('outerCircleCanvas');
-let outerCircleContext = outerCircleCanvas.getContext('2d');
-let innerCircleCanvas = document.getElementById('innerCircleCanvas');
-let innerCircleContext = innerCircleCanvas.getContext('2d');
+const brushCanvas = document.getElementById('brushCanvas');
+const brushContext = brushCanvas.getContext('2d');
+const outerCircleCanvas = document.getElementById('outerCircleCanvas');
+const outerCircleContext = outerCircleCanvas.getContext('2d');
+const innerCircleCanvas = document.getElementById('innerCircleCanvas');
+const innerCircleContext = innerCircleCanvas.getContext('2d');
 
 const pointSpeed = (params.speedRange) ? params.speedRange/1000 : document.getElementById('speedRange').value/1000;
 
-let outerCircle = {
+const outerCircle = {
     x: width / 2,
     y: height / 2,
     r: 300,
@@ -30,7 +30,7 @@ let outerCircle = {
     fill: false
 };
 
-let innerCircle = {
+const innerCircle = {
     x: null,
     y: null,
     r: 150,
@@ -39,7 +39,7 @@ let innerCircle = {
     speed: pointSpeed - speedIncrement
 };
 
-let currentPoint = {
+const currentPoint = {
     x: null,
     y: null,
     r: (params.widthRange) ? params.widthRange : 2,
@@ -55,7 +55,7 @@ window.requestAnimFrame = (callback => {
         };
 })();
 
-function drawPoint(point, context) {
+function drawCircle(point, context) {
     context.beginPath();
     context.arc(point.x, point.y, point.r, 0, 2*Math.PI);
     if (point.fill) {
@@ -78,7 +78,7 @@ function drawBrush(i, point, canvas, context, outer, refresh, reverse, backgroun
     if (refresh) context.clearRect(0, 0, canvas.width, canvas.height);
 
     if (!background || document.getElementById('showBackground').checked) {
-        drawPoint(point, context, true);
+        drawCircle(point, context, true);
     }
 }
 
@@ -145,7 +145,7 @@ function clearBackground() {
         innerCircleContext.clearRect(0, 0, innerCircleCanvas.width, innerCircleCanvas.height);
         outerCircleContext.clearRect(0, 0, outerCircleCanvas.width, outerCircleCanvas.height);
     } else {
-        drawPoint(outerCircle, outerCircleContext);
+        drawCircle(outerCircle, outerCircleContext);
     }
 }
 
@@ -158,8 +158,8 @@ function colourChange() {
     buildShareUrl();
 }
 
-let points = [currentPoint, outerCircle, {...innerCircle}, {...innerCircle, r: innerCircle.r/2, speed: pointSpeed}];
-drawPoint(outerCircle, outerCircleContext);
+let points = [currentPoint, outerCircle, {...innerCircle}, {...innerCircle, r: innerCircle.r/2, speed: pointSpeed - speedIncrement}];
+drawCircle(outerCircle, outerCircleContext);
 
 animate(points);
 setTimeout(() => circleChanges = false, 100);
