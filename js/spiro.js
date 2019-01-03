@@ -36,7 +36,7 @@ const innerCircle = {
     r: 150,
     colour: "gray",
     fill: false,
-    speed: pointSpeed - speedIncrement
+    speed: pointSpeed - speedIncrement*2
 };
 
 const currentPoint = {
